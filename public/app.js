@@ -18,9 +18,8 @@
 //         });
 //     }
 
-
-
 async function loadProducts() {
+
     const response = await fetch('/api/products');
 
     if (!response.ok) {
@@ -31,8 +30,6 @@ async function loadProducts() {
 }
 
 const list = document.querySelector('#list');
-const errorBox = document.querySelector('#error');
-const form = document.querySelector('#form');
 
 function render(products) {
     list.innerHTML = '';
@@ -44,15 +41,20 @@ function render(products) {
     }
 }
 
+const errorBox = document.querySelector('#error');
+
 async function refresh() {
     try {
         errorBox.textContent = '';
         const products = await loadProducts();
+
         render(products);
     } catch (err) {
         errorBox.textContent = `Не вдалось завантажити: ${err.message}`;
     }
 }
+
+const form = document.querySelector('#form');
 
 form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -62,6 +64,7 @@ form.addEventListener('submit', async (event) => {
     const title = formData.get('title');
     const price = Number(formData.get('price'));
 
+   
 
     try {
         const res = await fetch('/api/products', {
@@ -82,5 +85,6 @@ form.addEventListener('submit', async (event) => {
         errorBox.textContent = err.message;
     }
 });
+
 
 refresh();
